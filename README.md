@@ -1,4 +1,4 @@
 etherface.js
 ==============
 
-Lib to connect with the etherface server.
+JS Lib to connect with the Etherface real-time server. http://ether.fund/tool/etherface
