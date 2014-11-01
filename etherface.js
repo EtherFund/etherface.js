@@ -5,23 +5,49 @@
 - (c) 2014 J.R. Bédard (jrbedard.com)
 */
 
-function Etherface(key) {
-	var url = "http://api.ether.fund";
-	var hostname = document.location.hostname;
-	if(hostname == "localhost") {
-		url = "http://localhost"; // local debug
+function Etherface(args) {
+	this.key = args.key;
+	this.app = args.app;
+	this.url = "http://api.ether.fund";
+	this.hostname = document.location.hostname;
+	if(this.hostname == "localhost" && this.key == '111') {
+		this.url = "http://localhost:8080"; // local debug
 	}
-	var socket = io(url);
-	
-	socket.on('connect', function() {
-		//
-		socket.emit('client', 'tobi', function (data) {
-			console.log(data); // data will be 'woot'
+	this.socket = null;
+	return this;
+}
+
+Etherface.prototype.connect = function(data, con, dis) {
+	this.socket = io(this.url, {key: this.key, app: this.app});
+	this.socket.on('connect', function() {
+		if(con) { con(); }
+		
+		this.on('disconnect', function() {
+			if(dis) { dis(); }
 		});
+		
+		// ...
 	});
-	
-	socket.on('block', function (data) {
-		console.log(data);
-		//socket.emit('my other event', { my: 'data' });
+};
+
+Etherface.prototype.network = function(cmd, done) {
+	if(!this.socket) { return; }
+	this.socket.emit('ether', cmd, function(data) {
+		
+		if(done) { done(data); }
 	});
+};
+
+
+
+
+
+// REST
+
+Etherface.prototype.get = function() {
+	// 'http://api.ether.fund/blocks'
+};
+
+Etherface.prototype.post = function() {
+	// 'http://api.ether.fund/blocks'
 };
