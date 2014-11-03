@@ -10,7 +10,7 @@ function Etherface(args) {
 	this.app = args.app;
 	this.url = "http://api.ether.fund";
 	this.hostname = document.location.hostname;
-	if(this.hostname == "localhost" && this.key == '111') {
+	if(this.hostname == "localhost") {
 		this.url = "http://localhost:8080"; // local debug
 	}
 	this.socket = null;
@@ -19,6 +19,7 @@ function Etherface(args) {
 
 Etherface.prototype.connect = function(data, con, dis) {
 	this.socket = io(this.url, {key: this.key, app: this.app});
+	
 	this.socket.on('connect', function() {
 		if(con) { con(); }
 		
@@ -51,3 +52,5 @@ Etherface.prototype.get = function() {
 Etherface.prototype.post = function() {
 	// 'http://api.ether.fund/blocks'
 };
+
+
