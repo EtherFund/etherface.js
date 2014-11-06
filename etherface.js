@@ -8,16 +8,16 @@
 function Etherface(args) {
 	this.key = args.key;
 	this.app = args.app;
-	this.url = "http://api.ether.fund";
+	this.url = "http://api.ether.fund:80";
 	this.hostname = document.location.hostname;
 	if(this.hostname == "localhost") {
-		this.url = "http://localhost:8080"; // local debug
+		//this.url = "http://localhost:3000"; // local debug or not
 	}
 	this.socket = null;
 	return this;
 }
 
-Etherface.prototype.connect = function(data, con, dis) {
+Etherface.prototype.connect = function(data, con, dis, confail) {
 	this.socket = io(this.url, {key: this.key, app: this.app});
 	
 	this.socket.on('connect', function() {
@@ -25,6 +25,11 @@ Etherface.prototype.connect = function(data, con, dis) {
 		
 		this.on('disconnect', function() {
 			if(dis) { dis(); }
+		});
+		
+		this.on("connect_failed", function() {
+			console.log('failed');
+			if(confail) { confail(); }
 		});
 		
 		// ...
