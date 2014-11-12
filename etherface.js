@@ -56,7 +56,6 @@ Etherface.prototype.send = function(cmd, args, done) {
 
 //  R E S T
 
-
 // STATUS
 Etherface.prototype.status = {
 	get: function(fn) {
@@ -77,30 +76,50 @@ Etherface.prototype.contract = {
 	list : function(args,fn) {
 		this.get('/contracts', fn);
 	},
-	view : function(id,fn) {
-		this.get('/contracts/'+id, fn);
-	},
 	create : function(args,fn) {
 		this.put('/contracts', fn);
 	},
 	delete : function(id,fn) {
+		this.delete('/contracts', fn);
+	},
+	
+	view : function(id,fn) {
+		this.get('/contracts/'+id, fn);
 	},
 	update : function(id,fn) {
+		this.post('/contracts/'+id, fn);
 	},
 	validate : function(id,fn) {
+		this.get('/contracts/'+id+'/validate', fn);
 	},
 	compile : function(id,fn) {
+		this.post('/contracts/'+id+'/compile', fn);
 	},
 	simulate : function(id,fn) {
+		this.post('/contracts/'+id+'/simulate', fn);
 	},
 	audit : function(id,fn) {
+		this.post('/contracts/'+id+'/audit', fn);
 	}
 };
 
+
 // TRANSACTION
+Etherface.prototype.transaction = {
+};
+
 // ACCOUNT
+Etherface.prototype.account = {
+};
+
 // BLOCK
+Etherface.prototype.block = {
+};
+
 // ANALYTICS
+Etherface.prototype.analytics = {
+};
+
 
 // ETHER
 Etherface.prototype.ether = {
@@ -111,7 +130,7 @@ Etherface.prototype.ether = {
 		this.get('/ether/gas', fn);
 	},
 	faucet: function(fn) {
-		this.get('/ether/gas', fn);
+		this.post('/ether/faucet', fn);
 	},
 };
 
@@ -130,7 +149,7 @@ Etherface.prototype.currency = {
 		this.get('/currencies', fn);
 	},
 	get: function(sym,fn) {
-		this.get('/contracts/'+sym, fn);
+		this.get('/currencies/'+sym, fn);
 	},
 };
 
