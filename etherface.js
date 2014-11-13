@@ -61,10 +61,10 @@ Etherface.prototype.send = function(cmd, args, done) {
 // STATUS
 Etherface.prototype.status = function(cmd,args,fn) {
 	if(cmd=='get') {
-		this.get('/status',args,fn);
+		this.GET('/status',args,fn);
 	}
 	else if(cmd=='schema') {
-		this.get('/schema',args,fn);
+		this.GET('/schema',args,fn);
 	}
 	else {
 		return fn('invalid status method');
@@ -76,31 +76,31 @@ Etherface.prototype.status = function(cmd,args,fn) {
 Etherface.prototype.contract = function(cmd,args,fn) {
 	if(cmd=='list') {
 		//default args
-		this.get('/contracts',args,fn);
+		this.GET('/contracts',args,fn);
 	}
 	else if(cmd=='create') {
-		this.put('/contracts',args,fn);
+		this.PUT('/contracts',args,fn);
 	}
 	else if(cmd=='view') {
-		this.get('/contracts/'+args.id,args,fn);
+		this.GET('/contracts/'+args.id,args,fn);
 	}
 	else if(cmd=='update') {
-		this.post('/contracts/'+args.id,args,fn);
+		this.POST('/contracts/'+args.id,args,fn);
 	}
 	else if(cmd=='delete') {
-		this.delete('/contracts/'+args.id,args,fn);
+		this.DELETE('/contracts/'+args.id,args,fn);
 	}
 	else if(cmd=='validate') {
-		this.get('/contracts/'+args.id+'/validate',args,fn);
+		this.GET('/contracts/'+args.id+'/validate',args,fn);
 	}
 	else if(cmd=='compile') {
-		this.post('/contracts/'+args.id+'/compile',args,fn);
+		this.POST('/contracts/'+args.id+'/compile',args,fn);
 	}
 	else if(cmd=='simulate') {
-		this.post('/contracts/'+args.id+'/simulate',args,fn);
+		this.POST('/contracts/'+args.id+'/simulate',args,fn);
 	}
 	else if(cmd=='audit') {
-		this.post('/contracts/'+args.id+'/audit',args,fn);
+		this.POST('/contracts/'+args.id+'/audit',args,fn);
 	}
 	else {
 		return fn('invalid contract method');
@@ -110,31 +110,35 @@ Etherface.prototype.contract = function(cmd,args,fn) {
 
 // TRANSACTION
 Etherface.prototype.transaction = function(cmd,args,fn) {
+	return fn('invalid transaction method');
 };
 
 // ACCOUNT
 Etherface.prototype.account = function(cmd,args,fn) {
+	return fn('invalid account method');
 };
 
 // BLOCK
 Etherface.prototype.block = function(cmd,args,fn) {
+	return fn('invalid block method');
 };
 
 // ANALYTICS
 Etherface.prototype.analytics = function(cmd,args,fn) {
+	return fn('invalid analytics method');
 };
 
 
 // ETHER
 Etherface.prototype.ether = function(cmd,args,fn) {
 	if(cmd=='get') {
-		this.get('/ether',args,fn);
+		this.GET('/ether',args,fn);
 	}
 	else if(cmd=='gas') {
-		this.get('/ether/gas',args,fn);
+		this.GET('/ether/gas',args,fn);
 	}
 	else if(cmd=='faucet') {
-		this.post('/ether/faucet',args,fn);
+		this.POST('/ether/faucet',args,fn);
 	}
 	else {
 		return fn('invalid ether method');
@@ -145,7 +149,7 @@ Etherface.prototype.ether = function(cmd,args,fn) {
 // BITCOIN
 Etherface.prototype.bitcoin = function(cmd,args,fn) {
 	if(cmd=='get') {
-		this.self.get('/bitcoin',args,fn);
+		this.GET('/bitcoin',args,fn);
 	}
 	else {
 		return fn('invalid bitcoin method');
@@ -156,10 +160,10 @@ Etherface.prototype.bitcoin = function(cmd,args,fn) {
 // CURRENCY
 Etherface.prototype.currency = function(cmd,args,fn) {
 	if(cmd=='list') {
-		this.get('/currencies',args,fn);
+		this.GET('/currencies',args,fn);
 	}
 	else if(cmd=='get') {
-		this.get('/currencies/'+args.sym,args,fn);
+		this.GET('/currencies/'+args.sym,args,fn);
 	}
 	else {
 		return fn('invalid currency method');
@@ -169,22 +173,22 @@ Etherface.prototype.currency = function(cmd,args,fn) {
 
 
 // GET
-Etherface.prototype.get = function(path, data, done, error) {
+Etherface.prototype.GET = function(path, data, done, error) {
 	return this.ajax('GET',path,data,done,error);
 };
 
 // POST
-Etherface.prototype.post = function(path, data, done, error) {
+Etherface.prototype.POST = function(path, data, done, error) {
 	return this.ajax('POST',path,data,done,error);
 };
 
 // PUT
-Etherface.prototype.put = function(path, data, done, error) {
+Etherface.prototype.PUT = function(path, data, done, error) {
 	return this.ajax('PUT',path,data,done,error);
 };
 
 // DELETE
-Etherface.prototype.delete = function(path, data, done, error) {
+Etherface.prototype.DELETE = function(path, data, done, error) {
 	return this.ajax('DELETE',path,data,done,error);
 };
 
@@ -192,7 +196,7 @@ Etherface.prototype.delete = function(path, data, done, error) {
 Etherface.prototype.ajax = function(type, path, data, done, error) {
 	data.csrfmiddlewaretoken = gCsrfToken;
 	var url = this.hostname + path;
-	$.ajax({type:type, cache:false, url:url, data:data,
+	$.ajax({type:type, url:url, data:data, contentType:'application/json', cache:false, //data:JSON.stringify(obj),?
 		beforeSend:function(xhr, settings) {
 		},
 	  	success:function(data) {
