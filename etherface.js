@@ -11,11 +11,11 @@ function Etherface(args) {
 	this.app = args.app;
 	var hostname = document.location.hostname;
 	if(hostname == "localhost") {
-		this.hostname = "http://localhost:3000"; // local debug
+		this.hostname = "http://localhost"; // local debug
 		this.port = 3000;
 	} else {
-		this.hostname = "http://api.ether.fund:80";
-		this.port = 80;
+		this.hostname = "http://api.ether.fund";
+		this.port = 3000;
 	}
 	this.socket = null;
 	this.type = null;
@@ -26,7 +26,7 @@ function Etherface(args) {
 // SOCKET
 Etherface.prototype.connect = function(data, con, dis, confail) {
 	var self=this;
-	this.socket = io(this.hostname, {key: this.key, app: this.app});//, transports:['websocket']});
+	this.socket = io(this.hostname+':'+this.port, {key: this.key, app: this.app});//, transports:['websocket']});
 	// ["xhr-polling", "flashsocket", "htmlfile", "jsonp-polling", "websocket"]
 	
 	this.socket.on('connect', function() {
