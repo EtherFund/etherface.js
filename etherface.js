@@ -72,6 +72,20 @@ Etherface.prototype.status = function(cmd,args,fn) {
 };
 
 
+// PEERS
+Etherface.prototype.peer = function(cmd,args,fn) {
+	if(cmd=='list') {
+		this.GET('/peers',args,fn);
+	}
+	else if(cmd=='get') {
+		this.GET('/peers/'+args.id,args,fn);
+	}
+	else {
+		return fn('invalid peers method');
+	}
+};
+
+
 // CONTRACT
 Etherface.prototype.contract = function(cmd,args,fn) {
 	if(cmd=='list') {
@@ -194,7 +208,9 @@ Etherface.prototype.DELETE = function(path, data, done, error) {
 
 // AJAX
 Etherface.prototype.ajax = function(type, path, data, done, error) {
+	if(!this.hostname || this.hostname=='') { return 'Error: Etherface not initialized.' }
 	data.csrfmiddlewaretoken = gCsrfToken;
+	if(this.hostname == 'http://localhost') { this.hostname = 'http://localhost:3000' } // todo: fix
 	var url = this.hostname + path;
 	$.ajax({type:type, url:url, data:data, contentType:'application/json', cache:false, //data:JSON.stringify(obj),?
 		beforeSend:function(xhr, settings) {
@@ -209,7 +225,7 @@ Etherface.prototype.ajax = function(type, path, data, done, error) {
 	  	},
 	  	error:function() {
 			console.log("Etherface error on "+type+" "+url+" : "+data);
-			error(data);
+			if(error) { error(data); }
 	  	}
 	});
 };
