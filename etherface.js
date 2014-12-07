@@ -129,17 +129,33 @@ Etherface.prototype.transaction = function(cmd,args,fn) {
 
 // ACCOUNT
 Etherface.prototype.account = function(cmd,args,fn) {
+	
+	
 	return fn('invalid account method');
 };
 
 // BLOCK
 Etherface.prototype.block = function(cmd,args,fn) {
-	return fn('invalid block method');
+	if(cmd=='list') {
+		//default args
+		this.GET('/blocks',args,fn);
+	}
+	else if(cmd=='view') {
+		this.GET('/blocks/'+args.id,args,fn);
+	}
+	else {
+		return fn('invalid block method');
+	}
 };
+
 
 // ANALYTICS
 Etherface.prototype.analytics = function(cmd,args,fn) {
-	return fn('invalid analytics method');
+	if(cmd=='peers') {
+		this.GET('/analytics/peers',args,fn);
+	} else {
+		return fn('invalid analytics method');
+	}
 };
 
 
@@ -183,6 +199,32 @@ Etherface.prototype.currency = function(cmd,args,fn) {
 		return fn('invalid currency method');
 	}
 };
+
+
+// DAPP
+Etherface.prototype.dapp = function(cmd,args,fn) {
+	if(cmd=='list') {
+		//default args
+		this.GET('/dapps',args,fn);
+	}
+	else if(cmd=='create') {
+		this.PUT('/dapps',args,fn);
+	}
+	else if(cmd=='view') {
+		this.GET('/dapps/'+args.id,args,fn);
+	}
+	else if(cmd=='update') {
+		this.POST('/dapps/'+args.id,args,fn);
+	}
+	else if(cmd=='delete') {
+		this.DELETE('/dapps/'+args.id,args,fn);
+	}
+	else {
+		return fn('invalid DApp method');
+	}
+};
+
+
 
 
 
