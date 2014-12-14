@@ -81,9 +81,34 @@ Etherface.prototype.peer = function(cmd,args,fn) {
 		this.GET('/peers/'+args.id,args,fn);
 	}
 	else {
-		return fn('invalid peers method');
+		return fn('invalid peer method');
 	}
 };
+
+
+// TRANSACTION
+Etherface.prototype.transaction = function(cmd,args,fn) {
+	if(cmd=='list') {
+		this.GET('/transactions',args,fn);
+	}
+	else if(cmd=='get') {
+		this.GET('/transactions/'+args.id,args,fn);
+	}
+	else if(cmd=='simulate') {
+		this.GET('/transactions/simulate',args,fn);
+	}
+	else if(cmd=='validate') {
+		this.GET('/transactions/validate',args,fn);
+	}
+	else if(cmd=='create') {
+		this.PUT('/transactions',args,fn);
+	}
+	else {
+		return fn('invalid transaction method');
+	}
+};
+
+
 
 
 // CONTRACT
@@ -122,17 +147,28 @@ Etherface.prototype.contract = function(cmd,args,fn) {
 };
 
 
-// TRANSACTION
-Etherface.prototype.transaction = function(cmd,args,fn) {
-	return fn('invalid transaction method');
-};
+
 
 // ACCOUNT
 Etherface.prototype.account = function(cmd,args,fn) {
-	
-	
-	return fn('invalid account method');
+	if(cmd=='list') {
+		//default args
+		this.GET('/accounts',args,fn);
+	}
+	else if(cmd=='get') {
+		this.GET('/accounts/'+args.id,args,fn);
+	}
+	else if(cmd=='create') {
+		this.PUT('/accounts',args,fn);
+	}
+	else if(cmd=='update') {
+		this.POST('/accounts/'+args.id,args,fn);
+	}
+	else {
+		return fn('invalid account method');
+	}
 };
+
 
 // BLOCK
 Etherface.prototype.block = function(cmd,args,fn) {
@@ -140,7 +176,7 @@ Etherface.prototype.block = function(cmd,args,fn) {
 		//default args
 		this.GET('/blocks',args,fn);
 	}
-	else if(cmd=='view') {
+	else if(cmd=='get') {
 		this.GET('/blocks/'+args.id,args,fn);
 	}
 	else {
@@ -153,6 +189,10 @@ Etherface.prototype.block = function(cmd,args,fn) {
 Etherface.prototype.analytics = function(cmd,args,fn) {
 	if(cmd=='peers') {
 		this.GET('/analytics/peers',args,fn);
+	}
+	else if(cmd=='transactions') {
+		this.GET('/analytics/transactions',args,fn);
+		
 	} else {
 		return fn('invalid analytics method');
 	}
